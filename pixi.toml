@@ -2,10 +2,10 @@
 name = "aulas-implementacao-mef"
 description = "Aulas de implementação com Elementos Finitos na disciplina GA-020 do LNCC"
 channels = ["conda-forge"]
-platforms = ["linux-64", "osx-arm64", "win-64"]
+platforms = ["linux-64", "osx-arm64"]
 
 [dependencies]
-python = "*"
+python = ">=3.12,<3.14"
 
 [feature.formatters.dependencies]
 ruff = "*"
@@ -22,19 +22,18 @@ numpy = "*"
 scipy = "*"
 
 [feature.viz.dependencies]
-matplotlib-base = "*"
+matplotlib = "*"
 seaborn = "*"
 
-[feature.fem.dependencies]
+##############################################
+# Dependências específicas de Elementos Finitos
+##############################################
+[feature.fenics.dependencies]
 fenics-dolfinx = "*"
 
 [target.unix.activation.env]
 PROJECT_ROOT = "$PIXI_PROJECT_ROOT"
 NOTEBOOKS_PATH = "$PIXI_PROJECT_ROOT/notebooks"
-
-[target.win.activation.env]
-PROJECT_ROOT = "%PIXI_PROJECT_ROOT%"
-NOTEBOOKS_PATH = "%PIXI_PROJECT_ROOT%\\notebooks"
 
 [tasks]
 precommit = "pre-commit run --all-files"
@@ -43,4 +42,5 @@ notebooks-sync = "python scripts/sync_notebooks.py"
 precommit-sync = "python scripts/sync_notebooks.py && pre-commit run --all-files"
 
 [environments]
-default = { features = ["formatters", "viz", "sci", "notebooks", "fem"], solve-group = "default" }
+default = { features = ["formatters", "viz", "sci", "notebooks"], solve-group = "default" }
+fenics-env = { features = ["formatters", "viz", "sci", "notebooks", "fenics"], solve-group = "default" }
