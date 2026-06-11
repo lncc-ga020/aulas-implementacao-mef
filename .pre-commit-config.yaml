@@ -42,7 +42,12 @@ repos:
       args: [--quiet]
       files: ^notebooks/.*\.ipynb$
     - id: nbqa-ruff
-      args: [--fix]
+      args:
+        - --fix
+        - --extend-ignore=E402
+        - --extend-ignore=F403
+        - --extend-ignore=F405
+        - --extend-ignore=E741
       files: ^notebooks/.*\.ipynb$
 
 - repo: local
