@@ -1,205 +1,194 @@
-# template-notebooks
+# aulas-implementacao-mef
 
-Template para atividades de implementação baseados em notebooks Jupyter com ambiente
-reprodutível usando [Pixi](https://pixi.prefix.dev/latest/).
+Repositório com notebooks didáticos para aulas de implementação de métodos de
+elementos finitos na disciplina GA-020 do LNCC.
 
-Este repositório serve como ponto de partida para estudos computacionais,
-experimentos numéricos, análises de dados e atividades didáticas em que é
-importante que outras pessoas consigam instalar o mesmo ambiente e reproduzir os
-notebooks com o mínimo possível de configuração manual.
+O material está organizado em duas implementações paralelas:
+
+- `notebooks/fenics/`: notebooks em FEniCSx, usando a interface atual
+  `dolfinx`.
+- `notebooks/firedrake/`: notebooks em Firedrake, mantidos como contraparte
+  conceitual dos exemplos em FEniCSx.
+
+A sequência foi organizada para que cada aula apresente a forma forte, a forma
+fraca, a escolha dos espaços discretos, a montagem computacional e um
+diagnóstico numérico simples.
 
 ## Objetivos
 
-- Padronizar projetos de notebooks usados em atividades científicas e
-  acadêmicas.
-- Facilitar a reprodução dos resultados por alunos e colaboradores.
-- Evitar problemas comuns de ambiente, como versões diferentes de Python,
-  NumPy, SciPy, Jupyter ou outras bibliotecas.
-- Manter notebooks e scripts auxiliares organizados e formatados.
+- Manter exemplos de elementos finitos executáveis do começo ao fim.
+- Comparar implementações equivalentes em Firedrake e FEniCSx/dolfinx.
+- Usar notebooks como material de aula, com explicações passo a passo.
+- Facilitar a reprodução do ambiente FEniCSx com Pixi.
+- Preservar os notebooks em pares `.ipynb` e `.py` via Jupytext.
 
-## Conteúdo do repositório
+## Estrutura do repositório
 
-- `pixi.toml`: define o ambiente computacional do projeto e as tarefas
-  disponíveis.
-- `pixi.lock`: registra as versões resolvidas das dependências para melhorar a
-  reprodutibilidade.
-- `.pre-commit-config.yaml`: configura verificações automáticas de formatação e
-  limpeza dos notebooks.
-- `jupytext.toml`: configura o uso do Jupytext para sincronizar notebooks
-  `.ipynb` com arquivos texto equivalentes, quando aplicável.
+- `pixi.toml`: define dependências, ambientes e tarefas do projeto.
+- `pixi.lock`: registra as versões resolvidas das dependências Pixi.
+- `jupytext.toml`: configura o pareamento entre `.ipynb` e `.py:percent`.
 - `scripts/sync_notebooks.py`: sincroniza notebooks usando Jupytext.
-- `notebooks/`: diretório esperado para os notebooks do projeto.
+- `notebooks/fenics/`: aulas em FEniCSx/dolfinx.
+- `notebooks/firedrake/`: aulas em Firedrake.
 
-Se o diretório `notebooks/` ainda não existir no seu clone local, crie-o antes
-de adicionar novos notebooks:
+## Notebooks disponíveis
 
-```sh
-mkdir -p notebooks
-```
+Cada pasta (`fenics` e `firedrake`) contém a mesma sequência:
 
-## Como usar
+- `00-introducao-fem-*.ipynb`: organização do material e teste de importação.
+- `01-poisson-*.ipynb`: problema de Poisson primal com solução manufaturada.
+- `02-elasticidade-linear-*.ipynb`: elasticidade linear em deslocamentos.
+- `03-equacao-calor-*.ipynb`: equação do calor com Euler implícito.
+- `04-gray-scott-*.ipynb`: reação-difusão de Gray-Scott com sistema acoplado
+  não linear e evolução espaço-tempo.
+
+Os notebooks também incluem gráficos simples para visualização de soluções,
+componentes, erros e diagnósticos transientes.
+
+## Ambientes
+
+O Pixi gerencia o ambiente FEniCSx/dolfinx:
+
+- `default`: ambiente base com Jupyter, Jupytext, NumPy, SciPy, Pandas,
+  Matplotlib, Seaborn e ferramentas de formatação.
+- `fenics-env`: ambiente `default` mais `fenics-dolfinx`.
+
+Firedrake deve ser instalado e ativado separadamente. Consulte as instruções
+oficiais em:
+
+<https://www.firedrakeproject.org/install.html>
+
+## Como usar os notebooks FEniCSx/dolfinx
 
 ### 1. Instale o Pixi
 
-Este projeto usa o Pixi para criar um ambiente isolado e reprodutível. Isso
-significa que as bibliotecas usadas nos notebooks ficam separadas das
-bibliotecas instaladas no restante do seu computador.
-
-Instale o Pixi seguindo a documentação oficial:
+Siga a documentação oficial:
 
 <https://pixi.prefix.dev/latest/installation/>
 
-Depois da instalação, feche e abra novamente o terminal. Para conferir se o
-Pixi está disponível, rode:
+Depois da instalação, confira:
 
 ```sh
 pixi --version
 ```
 
-### 2. Baixe o repositório
-
-Clone o repositório:
+### 2. Clone o repositório
 
 ```sh
-git clone https://github.com/lncc-ga020/template-notebooks.git
+git clone https://github.com/lncc-ga020/aulas-implementacao-mef.git
+cd aulas-implementacao-mef
 ```
 
-Entre na pasta do projeto:
-
-```sh
-cd template-notebooks
-```
-
-### 3. Instale o ambiente do projeto
-
-Dentro da pasta do projeto, rode:
+### 3. Instale as dependências Pixi
 
 ```sh
 pixi install --frozen
 ```
 
-O argumento `--frozen` instrui o Pixi a respeitar o arquivo `pixi.lock`. Isso é
-importante para que todos usem, tanto quanto possível, as mesmas versões das
-dependências.
-
-### 4. Ative o ambiente
-
-Depois da instalação, ative o ambiente:
+### 4. Abra os notebooks FEniCSx
 
 ```sh
-pixi shell
-```
-
-Quando o ambiente está ativo, comandos como `python`, `jupyter`, `ruff` e
-`pre-commit` passam a usar as versões definidas pelo projeto.
-
-### 5. Abra os notebooks
-
-Com o ambiente Pixi ativo, você pode abrir o JupyterLab:
-
-```sh
+pixi shell -e fenics-env
 jupyter lab
 ```
 
-Depois disso, abra os arquivos `.ipynb` dentro do diretório `notebooks/`.
+Depois, abra os notebooks em `notebooks/fenics/`.
 
-Também é possível usar o VS Code. Nesse caso, uma forma prática é abrir o VS
-Code a partir do terminal em que o ambiente Pixi já está ativo:
+## Como usar os notebooks Firedrake
+
+Ative o ambiente Firedrake instalado no seu computador. Por exemplo, se o
+ambiente estiver em `~/firedrake/venv-firedrake`:
 
 ```sh
-code .
+source ~/firedrake/venv-firedrake/bin/activate
+jupyter lab
 ```
 
-No VS Code, abra o notebook desejado e selecione o interpretador Python do
-ambiente Pixi do projeto. Se você usa VS Code com frequência, também é
-recomendável instalar uma extensão para integração com ambientes Pixi.
+Depois, abra os notebooks em `notebooks/firedrake/`.
+
+Se o ambiente Firedrake não tiver Jupyter instalado, uma alternativa é ativar o
+ambiente e executar a versão `.py` pareada do notebook:
+
+```sh
+python notebooks/firedrake/01-poisson-firedrake.py
+```
 
 ## Fluxo de trabalho recomendado
 
-1. Atualize sua cópia local do repositório antes de começar a trabalhar:
-
-   ```sh
-   git pull
-   ```
-
-2. Ative o ambiente:
-
-   ```sh
-   pixi shell
-   ```
-
-3. Abra o JupyterLab ou o VS Code.
-
-4. Trabalhe nos notebooks dentro de `notebooks/`.
-
-5. Antes de enviar alterações, rode:
-
-   ```sh
-   pixi run precommit-sync
-   ```
-
-Esse comando sincroniza os notebooks com Jupytext e executa as verificações de
-formatação configuradas para o projeto.
-
-## Configuração para desenvolvimento
-
-Se você pretende modificar notebooks, scripts ou arquivos do projeto, instale os
-hooks do `pre-commit` depois de clonar o repositório:
+Antes de editar notebooks, atualize o repositório:
 
 ```sh
-pixi shell
-pre-commit install
+git pull
 ```
 
-Isso instala verificações automáticas que rodam antes de cada commit. Elas ajudam
-a manter os notebooks limpos, padronizados e mais fáceis de revisar.
-
-Se você clonar este repositório novamente em outra pasta do computador, será
-necessário rodar `pre-commit install` também nessa nova cópia.
-
-## Tarefas Pixi úteis
-
-Alguns comandos já estão definidos em `pixi.toml`:
+Para editar ou executar notebooks FEniCSx:
 
 ```sh
-pixi run notebooks-smoke
+pixi shell -e fenics-env
+jupyter lab
 ```
 
-Lista os notebooks encontrados em `notebooks/`. É uma verificação rápida para
-confirmar que o diretório de notebooks está organizado.
-
-```sh
-pixi run notebooks-sync
-```
-
-Sincroniza notebooks `.ipynb` com Jupytext.
-
-```sh
-pixi run precommit
-```
-
-Executa as verificações do `pre-commit` em todos os arquivos.
+Ao terminar alterações, sincronize os notebooks e rode as verificações:
 
 ```sh
 pixi run precommit-sync
 ```
 
-Sincroniza os notebooks e depois executa as verificações do `pre-commit`.
+## Tarefas Pixi úteis
 
-## Boas práticas para notebooks científicos
+Lista os notebooks encontrados em `notebooks/`:
 
-- Coloque notebooks principais em `notebooks/`.
-- Use nomes descritivos, por exemplo `analise_dados_experimento_01.ipynb`.
-- Evite depender de arquivos que existem apenas no seu computador.
-- Registre no próprio notebook quais dados, parâmetros e hipóteses foram usados.
-- Mantenha células em uma ordem que permita executar o notebook do começo ao
-  fim.
-- Sempre que possível, defina sementes aleatórias em simulações estocásticas.
+```sh
+pixi run notebooks-smoke
+```
+
+Sincroniza notebooks `.ipynb` com Jupytext:
+
+```sh
+pixi run notebooks-sync
+```
+
+Executa as verificações do `pre-commit`:
+
+```sh
+pixi run precommit
+```
+
+Sincroniza notebooks e executa as verificações:
+
+```sh
+pixi run precommit-sync
+```
+
+## Jupytext
+
+Os notebooks são mantidos em pares:
+
+- `.ipynb`: arquivo aberto no JupyterLab ou VS Code.
+- `.py`: representação textual em formato percent, mais adequada para revisão
+  em Git.
+
+A configuração está em `jupytext.toml`:
+
+```toml
+formats = "ipynb,py:percent"
+```
+
+## Pontos de atenção numérica
+
+- Os notebooks usam malhas pequenas para rodar rapidamente em aula.
+- Os diagnósticos incluídos são verificações didáticas, não estudos completos de
+  convergência.
+- Nos notebooks FEniCSx, as variáveis `OMP_NUM_THREADS`,
+  `OPENBLAS_NUM_THREADS` e `VECLIB_MAXIMUM_THREADS` são definidas antes do
+  `numpy` para evitar excesso de paralelismo em BLAS/OpenMP.
+- O exemplo de Gray-Scott resolve um sistema não linear acoplado em cada passo
+  de tempo. Em outros regimes paramétricos, a escolha do solver não linear e do
+  pré-condicionamento pode alterar bastante a robustez da execução.
 
 ## Arquivos gerados localmente
 
-O `.gitignore` deste projeto ignora alguns diretórios e arquivos comuns de saída,
-como:
+O `.gitignore` ignora arquivos comuns de saída, como:
 
 - `tmp/`
 - `outputs/`
@@ -207,39 +196,8 @@ como:
 - arquivos `.csv`
 - figuras `.png` dentro de `notebooks/`
 
-Isso ajuda a evitar que resultados temporários ou arquivos grandes sejam
-versionados por engano. Se algum arquivo de resultado for essencial para o
-projeto, discuta antes de adicioná-lo ao Git.
-
-## Problemas comuns
-
-### O comando `pixi` não foi encontrado
-
-Provavelmente o Pixi não foi instalado ou o terminal ainda não reconheceu a nova
-instalação. Feche e abra o terminal. Se o problema continuar, revise as
-instruções oficiais de instalação do Pixi.
-
-### O notebook não encontra uma biblioteca Python
-
-Confirme que você ativou o ambiente correto:
-
-```sh
-pixi shell
-```
-
-Se estiver usando VS Code, confira também se o kernel selecionado pertence ao
-ambiente Pixi deste projeto.
-
-### As verificações falharam antes do commit
-
-Rode:
-
-```sh
-pixi run precommit-sync
-```
-
-Algumas correções podem ser feitas automaticamente. Depois disso, revise os
-arquivos modificados, execute novamente o comando se necessário e faça o commit.
+Se algum resultado for essencial para uma aula, prefira documentar no notebook
+como reproduzi-lo.
 
 ## Licença
 
@@ -247,20 +205,19 @@ Este projeto usa a licença MIT. Veja o arquivo `LICENSE`.
 
 ## Declaração de uso de IA
 
-A revisão, refatoração e implementação deste template foi/é assistida por IA. LLMs utilizadas:
+A revisão, refatoração e implementação deste repositório foi/é assistida por IA.
+LLMs utilizadas:
 
 - OpenAI Codex;
-- Github Copilot.
+- GitHub Copilot.
 
 ## Apoio institucional
 
 Este projeto recebe apoio institucional do
-[Laboratório Nacional de Computação Científica (LNCC)](https://www.gov.br/lncc/pt-br),
-unidade de pesquisa do Ministério da Ciência, Tecnologia e Inovação (MCTI),
-Brasil.
+[Laboratório Nacional de Computação Científica (LNCC)](https://www.gov.br/lncc/pt-br).
 
-<p align="center">
+<p align="left">
   <a href="https://www.gov.br/lncc/pt-br">
-    <img src="resources/logo/lncc-mcti.svg" alt="LNCC (MCTI) logo" width="820">
+    <img src="resources/logo/lncc-mcti.svg" alt="Logo do LNCC" width="800">
   </a>
 </p>
