@@ -1,6 +1,6 @@
 [workspace]
-name = "template-notebooks"
-description = "A template for Jupyter notebooks projects using Pixi"
+name = "aulas-implementacao-mef"
+description = "Aulas de implementação com Elementos Finitos na disciplina GA-020 do LNCC"
 channels = ["conda-forge"]
 platforms = ["linux-64", "osx-arm64", "win-64"]
 
@@ -25,6 +25,9 @@ scipy = "*"
 matplotlib-base = "*"
 seaborn = "*"
 
+[feature.fem.dependencies]
+fenics-dolfinx = "*"
+
 [target.unix.activation.env]
 PROJECT_ROOT = "$PIXI_PROJECT_ROOT"
 NOTEBOOKS_PATH = "$PIXI_PROJECT_ROOT/notebooks"
@@ -40,4 +43,4 @@ notebooks-sync = "python scripts/sync_notebooks.py"
 precommit-sync = "python scripts/sync_notebooks.py && pre-commit run --all-files"
 
 [environments]
-default = { features = ["formatters", "viz", "sci", "notebooks"], solve-group = "default" }
+default = { features = ["formatters", "viz", "sci", "notebooks", "fem"], solve-group = "default" }
