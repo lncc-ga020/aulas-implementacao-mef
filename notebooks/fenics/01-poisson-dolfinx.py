@@ -1,10 +1,3 @@
-# ---
-# kernelspec:
-#   display_name: Python 3
-#   language: python
-#   name: python3
-# ---
-
 # %% [markdown]
 # # Problema de Poisson
 #
@@ -108,7 +101,6 @@ from mpi4py import rc
 rc.finalize = False
 
 from mpi4py import MPI
-from petsc4py import PETSc
 
 import matplotlib.pyplot as plt
 import matplotlib.tri as mtri
@@ -153,7 +145,7 @@ def boundary(x):
 
 
 boundary_dofs = fem.locate_dofs_geometrical(V, boundary)
-bc = fem.dirichletbc(PETSc.ScalarType(0.0), boundary_dofs, V)
+bc = fem.dirichletbc(0.0, boundary_dofs, V)
 
 # %% [markdown]
 # ## Montagem e solução

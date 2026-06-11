@@ -102,7 +102,7 @@ plt.show()
 # %% [markdown]
 # ## Observações importantes para o restante das aulas
 #
-# 1. Quando escrevemos $V_h \\subset H^1(\\Omega)$, a implementação em `dolfinx`
+# 1. Quando escrevemos $V_h \subset H^1(\Omega)$, a implementação em `dolfinx`
 #    aparece como um `functionspace`.
 # 2. Quando escrevemos uma forma como
 #    $$
