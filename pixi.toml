@@ -2,7 +2,7 @@
 name = "aulas-implementacao-mef"
 description = "Aulas de implementação com Elementos Finitos na disciplina GA-020 do LNCC"
 channels = ["conda-forge"]
-platforms = ["linux-64", "osx-arm64"]
+platforms = ["linux-64", "osx-arm64", "win-64"]
 
 [dependencies]
 python = ">=3.12,<3.14"
